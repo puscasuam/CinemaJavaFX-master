@@ -1,0 +1,56 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.control.TableColumn?>
+<?import javafx.scene.control.TableView?>
+<?import javafx.scene.control.cell.PropertyValueFactory?>
+<?import javafx.scene.layout.HBox?>
+<?import javafx.scene.layout.VBox?>
+<?import javafx.scene.text.Font?>
+
+<HBox alignment="CENTER" prefHeight="400.0" prefWidth="600.0" xmlns="http://javafx.com/javafx/8.0.172-ea"
+      xmlns:fx="http://javafx.com/fxml/1" fx:controller="UI.ShowMoviesOrderedByBookingsController">
+    <VBox>
+        <Label text="Movies ordered by bookings">
+            <font>
+                <Font name="System Bold" size="16.0"/>
+            </font>
+        </Label>
+        <HBox>
+            <TableView fx:id="tableViewMovies" editable="true" prefHeight="375.0" prefWidth="304.0">
+                <columns>
+                    <TableColumn fx:id="tableColumnIdMovie" text="ID">
+                        <cellValueFactory>
+                            <PropertyValueFactory property="id"/>
+                        </cellValueFactory>
+                    </TableColumn>
+                    <TableColumn fx:id="tableColumnNameMovie" prefWidth="128.00003051757812" text="Movie Name">
+                        <cellValueFactory>
+                            <PropertyValueFactory property="name"/>
+                        </cellValueFactory>
+                    </TableColumn>
+                    <!--<TableColumn fx:id="tableColumnYearMovie" prefWidth="89.99996948242188" text="Year">-->
+                    <!--<cellValueFactory>-->
+                    <!--<PropertyValueFactory property="year"/>-->
+                    <!--</cellValueFactory>-->
+                    <!--</TableColumn>-->
+                    <!--<TableColumn fx:id="tableColumnPriceMovie" prefWidth="94.0" text="Price">-->
+                    <!--<cellValueFactory>-->
+                    <!--<PropertyValueFactory property="price"/>-->
+                    <!--</cellValueFactory>-->
+                    <!--</TableColumn>-->
+                    <!--<TableColumn fx:id="tableColumnOnScreensMovie" prefWidth="83.0" text="On screen">-->
+                    <!--<cellValueFactory>-->
+                    <!--<PropertyValueFactory property="onScreens"/>-->
+                    <!--</cellValueFactory>-->
+                    <!--</TableColumn>-->
+                    <TableColumn fx:id="tableColumnBookingsNumber" text="Bookings">
+                        <cellValueFactory>
+                            <PropertyValueFactory property="bookings"/>
+                        </cellValueFactory>
+                    </TableColumn>
+                </columns>
+            </TableView>
+        </HBox>
+    </VBox>
+</HBox>
