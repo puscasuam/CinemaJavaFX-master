@@ -6,9 +6,13 @@ import Repository.IRepository;
 import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Stack;
 
 public class CustomerCardService {
     private IRepository<CustomerCard> cardRepository;
+    private Stack<UndoRedoOperation<CustomerCard>> undoableOperations = new Stack<>();
+    private Stack<UndoRedoOperation<CustomerCard>> redoableOperations = new Stack<>();
+
 
     public CustomerCardService(IRepository<CustomerCard> cardRepository) {
         this.cardRepository = cardRepository;
@@ -35,6 +39,8 @@ public class CustomerCardService {
             }
         }
         cardRepository.insert(card);
+        undoableOperations.add(new AddOperation<>(cardRepository, card));
+        redoableOperations.clear();
     }
 
     /**
@@ -50,14 +56,17 @@ public class CustomerCardService {
      * @throws RuntimeException if a card with that CNP already exists and isn't the current card CNP
      */
     public void update(String id, String name, String surname, String CNP, LocalDate dateOfBirth, LocalDate registrationDate, int bonusPoints) {
-        CustomerCard card = new CustomerCard(id, name, surname, CNP, dateOfBirth, registrationDate, bonusPoints);
+        CustomerCard actualCard = cardRepository.getById(id);
+        CustomerCard updatedCard = new CustomerCard(id, name, surname, CNP, dateOfBirth, registrationDate, bonusPoints);
         List<CustomerCard> all = new ArrayList<>(cardRepository.getAll());
         for (CustomerCard cardToTestCNP : all) {
-            if (CNP.equals(cardToTestCNP.getCNP()) && !CNP.equals(card.getCNP())) {
+            if (CNP.equals(cardToTestCNP.getCNP()) && !CNP.equals(updatedCard.getCNP())) {
                 throw new CardServiceException(String.format("The %s CNP already exists", CNP));
             }
         }
-        cardRepository.update(card);
+        cardRepository.update(updatedCard);
+        undoableOperations.add(new UpdateOperation(cardRepository, updatedCard, actualCard));
+        redoableOperations.clear();
     }
 
     /**
@@ -66,7 +75,10 @@ public class CustomerCardService {
      * @param id the id of the card we want to remove
      */
     public void remove(String id) {
+        CustomerCard card = cardRepository.getById(id);
         cardRepository.remove(id);
+        undoableOperations.add(new DeleteOperation<>(cardRepository, card));
+        redoableOperations.clear();
     }
 
     /**
@@ -108,11 +120,39 @@ public class CustomerCardService {
      * @param bonus     the amount of bonus points
      */
     public void luckyBonusPoints(LocalDate birthday1, LocalDate birthday2, int bonus) {
+        List<CustomerCard> actualCards = new ArrayList<>();
+        List<CustomerCard> updatedCards = new ArrayList<>();
+
         for (CustomerCard c : cardRepository.getAll()) {
 //            if (c.getDateOfBirth().isAfter(birthday1) && c.getDateOfBirth().isBefore(birthday2)) {
-            if (c.getDateOfBirth().getDayOfYear()>birthday1.getDayOfYear() && c.getDateOfBirth().getDayOfYear()<birthday2.getDayOfYear()) {
-                c.setBonusPoints(c.getBonusPoints() + bonus);
+            if (c.getDateOfBirth().getDayOfYear() > birthday1.getDayOfYear() && c.getDateOfBirth().getDayOfYear() < birthday2.getDayOfYear()) {
+                actualCards.add(c);
+                CustomerCard updatedCard = new CustomerCard(c.getId(), c.getName(), c.getSurname(), c.getCNP(), c.getDateOfBirth(), c.getRegistrationDate(), c.getBonusPoints());
+                updatedCard.setBonusPoints(updatedCard.getBonusPoints() + bonus);
+                cardRepository.update(updatedCard);
+                updatedCards.add(updatedCard);
             }
         }
+        undoableOperations.add(new UpdateOperations(cardRepository, updatedCards, actualCards));
+        redoableOperations.clear();
     }
+
+    public void undo() {
+        if (!undoableOperations.empty()) {
+            UndoRedoOperation<CustomerCard> lastOperation = undoableOperations.pop();
+            lastOperation.doUndo();
+            redoableOperations.add(lastOperation);
+
+        }
+    }
+
+    public void redo() {
+        if (!redoableOperations.empty()) {
+            UndoRedoOperation<CustomerCard> lastOperation = redoableOperations.pop();
+            lastOperation.doRedo();
+            undoableOperations.add(lastOperation);
+        }
+    }
+
+
 }

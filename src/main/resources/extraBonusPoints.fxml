@@ -73,5 +73,7 @@
         <TextField fx:id="bonusPoints" prefHeight="25.0" prefWidth="161.0" promptText="Bonus Points"/>
         <Button fx:id="extraButton" onAction="#extraPointsClick" text="Give Extra Points"/>
         <Button fx:id="cancelButton" onAction="#cancelClick" text="Cancel"/>
+        <Button onAction="#btnCardsUpdateUndoClick" text="Undo update bonus points operation" />
+        <Button onAction="#btnCardsUpdateRedoClick" text="Redo update bonus points operation" />
     </HBox>
 </VBox>

@@ -1,16 +1,22 @@
 package Service;
 
+import Domain.Booking;
 import Domain.Movie;
 import Repository.IRepository;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Stack;
 
 public class MovieService {
     private IRepository<Movie> movieRepository;
+    private Stack<UndoRedoOperation<Movie>> undoableOperations = new Stack<>();
+    private Stack<UndoRedoOperation<Movie>> redoableOperations = new Stack<>();
+
 
     public MovieService(IRepository<Movie> movieRepository) {
         this.movieRepository = movieRepository;
+
     }
 
     /**
@@ -25,6 +31,8 @@ public class MovieService {
     public void insert(String id, String name, int year, double price, boolean onScreens) {
         Movie movie = new Movie(id, name, year, price, onScreens);
         movieRepository.insert(movie);
+        undoableOperations.add(new AddOperation<>(movieRepository, movie));
+        redoableOperations.clear();
     }
 
     /**
@@ -37,8 +45,17 @@ public class MovieService {
      * @param onScreens boolean for setting if movie is on screens or not
      */
     public void update(String id, String name, int year, double price, boolean onScreens) {
-        Movie movie = new Movie(id, name, year, price, onScreens);
-        movieRepository.update(movie);
+
+        Movie actualMovie = movieRepository.getById(id);
+
+        if (actualMovie != null) {
+            Movie updatedMovie = new Movie(id, name, year, price, onScreens);
+            movieRepository.update(updatedMovie);
+
+            undoableOperations.add(new UpdateOperation(movieRepository, updatedMovie, actualMovie));
+            redoableOperations.clear();
+        }
+        
     }
 
     /**
@@ -47,8 +64,12 @@ public class MovieService {
      * @param id the id of the movie that we want to remove
      */
     public void remove(String id) {
+        Movie movie = movieRepository.getById(id);
         movieRepository.remove(id);
+        undoableOperations.add(new DeleteOperation<>(movieRepository, movie));
+        redoableOperations.clear();
     }
+
 
     /**
      * list of all movies
@@ -77,5 +98,19 @@ public class MovieService {
         return found;
     }
 
+    public void undo() {
+        if (!undoableOperations.empty()) {
+            UndoRedoOperation<Movie> lastOperation = undoableOperations.pop();
+            lastOperation.doUndo();
+            redoableOperations.add(lastOperation);
+        }
+    }
 
+    public void redo() {
+        if (!redoableOperations.empty()) {
+            UndoRedoOperation<Movie> lastOperation = redoableOperations.pop();
+            lastOperation.doRedo();
+            undoableOperations.add(lastOperation);
+        }
+    }
 }

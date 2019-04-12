@@ -65,4 +65,16 @@ public class ExtraBonusPointsController {
         Stage stage = (Stage) cancelButton.getScene().getWindow();
         stage.close();
     }
+
+    public void btnCardsUpdateUndoClick(ActionEvent actionEvent) {
+        cardService.undo();
+        cards.clear();
+        cards.addAll(cardService.getAll());
+    }
+
+    public void btnCardsUpdateRedoClick(ActionEvent actionEvent) {
+        cardService.redo();
+        cards.clear();
+        cards.addAll(cardService.getAll());
+    }
 }

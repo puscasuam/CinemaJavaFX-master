@@ -9,12 +9,16 @@ import java.time.LocalDate;
 import java.time.LocalTime;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Stack;
 
 public class BookingService {
 
     private IRepository<Booking> bookingRepository;
     private IRepository<Movie> movieRepository;
     private IRepository<CustomerCard> cardRepository;
+
+    private Stack<UndoRedoOperation<Booking>> undoableOperations = new Stack<>();
+    private Stack<UndoRedoOperation<Booking>> redoableOperations = new Stack<>();
 
     public BookingService(IRepository<Booking> bookingRepository, IRepository<Movie> movieRepository, IRepository<CustomerCard> cardRepository) {
         this.bookingRepository = bookingRepository;
@@ -53,6 +57,8 @@ public class BookingService {
         if (card != null) {
             card.setBonusPoints((int) (card.getBonusPoints() + (movieSold.getPrice() / 10)));
         }
+        undoableOperations.add(new AddOperation<>(bookingRepository, booking));
+        redoableOperations.clear();
     }
 
 
@@ -66,8 +72,11 @@ public class BookingService {
      * @param time    the time booking update
      */
     public void update(String id, String idMovie, String idCard, LocalDate date, LocalTime time) {
-        Booking booking = new Booking(id, idMovie, idCard, date, time);
-        bookingRepository.update(booking);
+        Booking actualBooking = bookingRepository.getById(id);
+        Booking updatedBooking = new Booking(id, idMovie, idCard, date, time);
+        bookingRepository.update(updatedBooking);
+        undoableOperations.add(new UpdateOperation<>(bookingRepository, updatedBooking, actualBooking));
+        redoableOperations.clear();
     }
 
     /**
@@ -76,7 +85,10 @@ public class BookingService {
      * @param id the id of the booking we want to remove
      */
     public void remove(String id) {
+        Booking booking = bookingRepository.getById(id);
         bookingRepository.remove(id);
+        undoableOperations.add(new DeleteOperation<>(bookingRepository, booking));
+        redoableOperations.clear();
     }
 
     /**
@@ -124,14 +136,37 @@ public class BookingService {
 
     /**
      * removes bookings between two dates
+     *
      * @param begin the begining date
-     * @param end the ending date
+     * @param end   the ending date
      */
     public void removeBookingsByPeriod(LocalDate begin, LocalDate end) {
+        List<Booking> deletedBookings = new ArrayList<>();
+
         for (Booking b : bookingRepository.getAll()) {
-            if(b.getDate().isAfter(begin) && b.getDate().isBefore(end)){
+            if (b.getDate().isAfter(begin) && b.getDate().isBefore(end)) {
+                deletedBookings.add(b);
                 bookingRepository.remove(b.getId());
             }
+        }
+
+        undoableOperations.add(new DeleteOperations<>(bookingRepository, deletedBookings));
+        redoableOperations.clear();
+    }
+
+    public void undo() {
+        if (!undoableOperations.empty()) {
+            UndoRedoOperation<Booking> lastOperation = undoableOperations.pop();
+            lastOperation.doUndo();
+            redoableOperations.add(lastOperation);
+        }
+    }
+
+    public void redo() {
+        if (!redoableOperations.empty()) {
+            UndoRedoOperation<Booking> lastOperation = redoableOperations.pop();
+            lastOperation.doRedo();
+            undoableOperations.add(lastOperation);
         }
     }
 }

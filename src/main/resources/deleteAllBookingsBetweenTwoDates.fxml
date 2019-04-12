@@ -62,5 +62,7 @@
         <Pane prefHeight="100.0" prefWidth="45.0"/>
         <Button fx:id="deleteButton" onAction="#deleteBookingsClick" text="Delete"/>
         <Button fx:id="cancelButton" onAction="#cancelClick" text="Cancel"/>
+        <Button onAction="#btnBookingDeleteUndoClick" text="Undo booking delete" />
+        <Button onAction="#btnBookingDeleteRedoClick" text="Redo booking delete" />
     </HBox>
 </VBox>

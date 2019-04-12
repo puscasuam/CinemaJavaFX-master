@@ -62,4 +62,18 @@ public class DeleteAllBookingsBetweenTwoDatesController {
         Stage stage = (Stage) cancelButton.getScene().getWindow();
         stage.close();
     }
+
+    public void btnBookingDeleteUndoClick(ActionEvent actionEvent) {
+        bookingService.undo();
+        bookings.clear();
+        bookings.addAll(bookingService.getAll());
+
+    }
+
+    public void btnBookingDeleteRedoClick(ActionEvent actionEvent) {
+        bookingService.redo();
+        bookings.clear();
+        bookings.addAll(bookingService.getAll());
+
+    }
 }

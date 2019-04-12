@@ -56,6 +56,9 @@
                 <Button onAction="#btnAddMovieClick" text="Add movie"/>
                 <Button onAction="#btnUpdateMovieClick" text="Update movie"/>
                 <Button onAction="#btnMovieDeleteClick" text="Delete movie"/>
+                <Button onAction="#btnMovieUndoClick" text="Undo movie operation" />
+                <Button onAction="#btnMovieRedoClick" text="Redo movie operation" />
+
             </HBox>
         </VBox>
         <graphic>
@@ -118,6 +121,8 @@
                 <Button onAction="#btnAddCardClick" text="Add card"/>
                 <Button onAction="#btnUpdateCardClick" text="Update card"/>
                 <Button onAction="#btnDeleteCardClick" text="Delete card"/>
+                <Button onAction="#btnClientUndoClick" text="Undo card operation" />
+                <Button onAction="#btnClientRedoClick" text="Redo card operation" />
             </HBox>
         </VBox>
     </Tab>
@@ -166,6 +171,8 @@
                 <Button onAction="#btnAddBookingClick" text="Add booking"/>
                 <Button onAction="#btnUpdateBookingClick" text="Update booking"/>
                 <Button onAction="#btnDeleteBookingClick" text="Delete booking"/>
+                <Button onAction="#btnBookingUndoClick" text="Undo booking operation" />
+                <Button onAction="#btnBookingRedoClick" text="Redo booking operation" />
             </HBox>
         </VBox>
     </Tab>

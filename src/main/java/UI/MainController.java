@@ -322,4 +322,40 @@ public class MainController {
             logger.log(Level.SEVERE, "Failed to create new Window: Extra bonus points add.", e);
         }
     }
+
+    public void btnMovieUndoClick(ActionEvent actionEvent) {
+        movieService.undo();
+        movies.clear();
+        movies.addAll(movieService.getAll());
+    }
+
+    public void btnMovieRedoClick(ActionEvent actionEvent) {
+        movieService.redo();
+        movies.clear();
+        movies.addAll(movieService.getAll());
+    }
+
+    public void btnClientUndoClick(ActionEvent actionEvent) {
+        cardService.undo();
+        cards.clear();
+        cards.addAll(cardService.getAll());
+    }
+
+    public void btnClientRedoClick(ActionEvent actionEvent) {
+        cardService.redo();
+        cards.clear();
+        cards.addAll(cardService.getAll());
+    }
+
+    public void btnBookingUndoClick(ActionEvent actionEvent) {
+        bookingService.undo();
+        bookings.clear();
+        bookings.addAll(bookingService.getAll());
+    }
+
+    public void btnBookingRedoClick(ActionEvent actionEvent) {
+        bookingService.redo();
+        bookings.clear();
+        bookings.addAll(bookingService.getAll());
+    }
 }
