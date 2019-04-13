@@ -6,6 +6,8 @@ import Repository.JsonFileRepository;
 import Service.MovieService;
 import org.junit.jupiter.api.Test;
 
+import java.util.List;
+
 import static org.junit.jupiter.api.Assertions.*;
 
 class MovieServiceTest {
@@ -28,6 +30,9 @@ class MovieServiceTest {
 
     @Test
     void remove() {
+
+
+
     }
 
     @Test
