@@ -11,6 +11,22 @@ public class MovieValidator implements IValidator<Movie> {
     public void validate(Movie movie) {
 
         String errors = "";
+
+        int id = Integer.parseInt(movie.getId()), reversedId = 0, remainder, originalId;
+        originalId = id;
+
+        while(id !=0){
+            remainder = id % 10;
+            reversedId = reversedId * 10 + remainder;
+            id /= 10;
+        }
+
+        if(originalId != reversedId){
+            throw new RuntimeException("This id is not a palindrome number");
+        }
+
+
+
         if (movie.getPrice() <= 0) {
             errors += "The price must be greater than 0!\n";
         }

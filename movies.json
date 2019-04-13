@@ -1,9 +1,11 @@
+{"name":"Insurgent","year":2011,"price":50.0,"onScreens":true,"bookings":0,"id":"11"}
+{"name":"sefkrf","year":2019,"price":23.0,"onScreens":true,"bookings":0,"id":"22"}
 {"name":"Game of Thrones s01e01","year":2012,"price":43.0,"onScreens":true,"bookings":0,"id":"12"}
 {"name":"Titanic","year":2013,"price":67.0,"onScreens":true,"bookings":0,"id":"13"}
 {"name":"The Wolf of Wall Street ","year":2014,"price":43.0,"onScreens":true,"bookings":0,"id":"14"}
 {"name":"Django","year":2015,"price":29.0,"onScreens":true,"bookings":0,"id":"15"}
 {"name":"Hatefull 8","year":2016,"price":53.0,"onScreens":true,"bookings":0,"id":"16"}
-{"name":"Batman","year":2018,"price":100.0,"onScreens":true,"bookings":0,"id":"1"}
+{"name":"Batman","year":2000,"price":20.0,"onScreens":true,"bookings":0,"id":"1"}
 {"name":"Superman","year":2001,"price":40.0,"onScreens":true,"bookings":0,"id":"2"}
 {"name":"Robin Hood","year":2003,"price":70.0,"onScreens":true,"bookings":0,"id":"3"}
 {"name":"Avengers","year":2004,"price":45.0,"onScreens":true,"bookings":0,"id":"4"}
@@ -12,5 +14,4 @@
 {"name":"Dirty Grandpa","year":2007,"price":15.0,"onScreens":true,"bookings":0,"id":"7"}
 {"name":"X-MEN","year":2008,"price":18.0,"onScreens":true,"bookings":0,"id":"8"}
 {"name":"Ant Man","year":2009,"price":37.0,"onScreens":true,"bookings":0,"id":"9"}
-{"name":"Test1","year":2015,"price":40.0,"onScreens":true,"bookings":0,"id":"21"}
 {"name":"Divergent","year":2010,"price":48.0,"onScreens":true,"bookings":0,"id":"10"}

@@ -11,6 +11,20 @@ public class CustomerCardValidator implements IValidator<CustomerCard> {
     public void validate(CustomerCard card) {
         String errors = "";
 
+        int id = Integer.parseInt(card.getId()), reversedId = 0, remainder, originalId;
+        originalId = id;
+
+        while(id !=0){
+            remainder = id % 10;
+            reversedId = reversedId * 10 + remainder;
+            id /= 10;
+        }
+
+        if(originalId != reversedId){
+            throw new RuntimeException("This id is not a palindrome number");
+        }
+
+
         if (card.getCNP().length() != 13) {
             errors += "The CNP must have 13 characters! \n";
         }
